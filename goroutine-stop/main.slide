@@ -1,6 +1,5 @@
 No Goroutine left behind
-or how to stop gracefully and avoid leaking goroutines
-4 Feb 2017
+or how to avoid leaking goroutines
 Tags: Golang, goroutine, channels
 
 Paul Piscuc
@@ -114,6 +113,6 @@ CTRL+C and friends can be cought as an OS signal
 
 * Conclusions
 
-- don't leak goroutines. Find a suitable way of stopping them
-- use Context if you have a chain of calls
-- don't ignore teardown
+- Don't leak goroutines. Find a suitable way of stopping them
+- Use Context if you have a chain of calls
+- Don't ignore teardown

@@ -16,7 +16,7 @@ func doWork(c chan bool) {
 			return
 		default:
 			time.Sleep(time.Duration(rand.Intn(1000)) * time.Millisecond)
-			fmt.Println("work\n")
+			fmt.Println("work")
 		}
 	}
 }

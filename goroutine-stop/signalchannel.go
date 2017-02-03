@@ -21,7 +21,7 @@ func doWork(c chan bool) {
 func main() {
 	quit := make(chan bool)
 	go doWork(quit)
-	time.Sleep(5 * time.Second)
+	time.Sleep(3 * time.Second)
 	close(quit) // quit <- true
 	fmt.Println("done")
 }

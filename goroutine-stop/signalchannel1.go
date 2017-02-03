@@ -24,7 +24,7 @@ func main() {
 	for i:= 0; i<3; i++ {
 		go doWork(i, quit)
 	}
-	time.Sleep(5 * time.Second)
+	time.Sleep(3 * time.Second)
 	close(quit) // quit <- true
 	fmt.Println("done")
 }
