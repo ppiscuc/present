@@ -1,0 +1,104 @@
+No Goroutine left behind
+or how to stop gracefully and avoid leaking goroutines
+FOSDEM
+4 Feb 2017
+Tags: Golang, goroutine, channels
+
+Paul Piscuc
+Security Consultant
+@ppiscuc
+
+* About me
+
+- Using go for 2 years
+- Working at [[http://proximus.com]]
+- Doing security
+
+* Goroutines are fun
+
+Easy to start
+
+Light on the OS (lightweight threads)
+
+In the language, not a library
+
+
+.play simplego.go /START OMIT/,/END OMIT/
+
+* Goroutines are dangerous
+
+They use the same address space, so access to shared memory must be syncronized
+
+Share data by communicating (use channels!)
+
+.play channels.go /START OMIT/,/END OMIT/
+
+* Easy to start but hard to stop
+
+Goroutines are easy to start, but how do we stop them?
+
+We will have 2 workers: 1 that does the work and finishes, 1 that will be forever
+
+* Ignore it
+
+The go statement runs the function, but doesn't make the caller wait.
+(please don't do this)
+
+.play ignore.go /START OMIT/,/END OMIT/
+
+* Wait for it to finish
+
+Wait for it to finish (please don't do this)
+
+.play timesleep.go /START OMIT/,/END OMIT/
+
+* Wait group
+
+Better way to wait for it to finish
+
+.play waitgroup.go /START OMIT/,/END OMIT/
+
+* Wait group - multiple
+
+What about multiple workers?
+The same principle applies
+
+.play waitgroup1.go /START OMIT/,/END OMIT/
+
+* Signal channel
+
+.play signalchannel.go /START OMIT/,/END OMIT/
+
+* Signal channel - multiple
+
+What about signaling multiple workers?
+Closing the channel will notify all the workers
+
+.play signalchannel1.go /START OMIT/,/END OMIT/
+
+* Teardown
+
+What if we need to do teardown?
+We use another channel!
+
+.play signalteardown.go /START OMIT/,/END OMIT/
+
+* Context
+
+Can I do it with context? Yes you can!
+
+Great presentation about context [[https://talks.golang.org/2014/gotham-context.slide]]
+
+.play context.go /START OMIT/,/END OMIT/
+
+* How do I handle CTRL+C ?
+
+CTRL+C and friends can be cought as an OS signal
+
+.play signalos.go /START OMIT/,/END OMIT/
+
+* Conclusions
+
+- don't leak goroutines. Find a suitable way of stopping them
+- use Context if you have a chain of calls
+- don't ignore teardown
