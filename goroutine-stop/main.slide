@@ -1,6 +1,5 @@
 No Goroutine left behind
 or how to stop gracefully and avoid leaking goroutines
-FOSDEM
 4 Feb 2017
 Tags: Golang, goroutine, channels
 
@@ -11,8 +10,10 @@ Security Consultant
 * About me
 
 - Using go for 2 years
-- Working at [[http://proximus.com]]
+- Working at [[http://proximus.com][Proximus]]
 - Doing security
+
+.image gopherizeme.png _ 300
 
 * Goroutines are fun
 
@@ -29,7 +30,7 @@ In the language, not a library
 
 They use the same address space, so access to shared memory must be syncronized
 
-Share data by communicating (use channels!)
+Share memory by communicating (use channels!)
 
 .play channels.go /START OMIT/,/END OMIT/
 
@@ -39,46 +40,60 @@ Goroutines are easy to start, but how do we stop them?
 
 We will have 2 workers: 1 that does the work and finishes, 1 that will be forever
 
-* Ignore it
+    func doWork() {
+    		time.Sleep(time.Duration(rand.Intn(1000)) * time.Millisecond)
+    		fmt.Println("work")
+    }
+
+    func doWorkForever() {
+    	for {
+    		time.Sleep(time.Duration(rand.Intn(1000)) * time.Millisecond)
+    		fmt.Println("work")
+    	}
+    }
+
+* BAD: Ignore it
 
 The go statement runs the function, but doesn't make the caller wait.
-(please don't do this)
+This way, main can exit before the goroutine executed.
 
 .play ignore.go /START OMIT/,/END OMIT/
 
-* Wait for it to finish
+* BAD: Ignore it a bit longer
 
-Wait for it to finish (please don't do this)
+Wait for a specific time period, and then exist  (please don't do this)
 
 .play timesleep.go /START OMIT/,/END OMIT/
 
 * Wait group
 
-Better way to wait for it to finish
+A WaitGroup waits for a goroutine or collection of goroutines to finish.
+The main goroutine calls Add to set the number of goroutines.
+Then, each gorouine runs and calls Done when finished.
+Wait will block untill all goroutines have finished.
 
 .play waitgroup.go /START OMIT/,/END OMIT/
 
 * Wait group - multiple
 
-What about multiple workers?
-The same principle applies
+What about multiple workers? The same principle applies
 
 .play waitgroup1.go /START OMIT/,/END OMIT/
 
 * Signal channel
 
+Use a channel to signal the worker that it's time to close
+
 .play signalchannel.go /START OMIT/,/END OMIT/
 
 * Signal channel - multiple
 
-What about signaling multiple workers?
-Closing the channel will notify all the workers
+What about signaling multiple workers? Closing the channel will notify all the workers
 
 .play signalchannel1.go /START OMIT/,/END OMIT/
 
-* Teardown
+* What if we need to do teardown?
 
-What if we need to do teardown?
 We use another channel!
 
 .play signalteardown.go /START OMIT/,/END OMIT/

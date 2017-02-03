@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 )
-// START OMIT
+
 func doWork(c chan bool) {
 	for {
 		select {
@@ -20,7 +20,7 @@ func doWork(c chan bool) {
 		}
 	}
 }
-
+// START OMIT
 func main() {
 	quit := make(chan bool)
 	c := make(chan os.Signal, 1) //buffered or risk missing the signal if not ready to receive when signal is sent

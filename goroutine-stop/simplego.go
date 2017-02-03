@@ -13,7 +13,7 @@ func say(s string) {
 }
 
 func main() {
-	go say("Hello")
+	go say("Hello") // HL
 	say("FOSDEM")
 }
 // END OMIT

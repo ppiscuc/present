@@ -10,7 +10,7 @@ import (
 func doWork(ctx context.Context) {
 	for {
 		select {
-		case <- ctx.Done():
+		case <- ctx.Done(): // HL
 			return
 		default:
 			time.Sleep(time.Duration(rand.Intn(1000)) * time.Millisecond)
@@ -20,11 +20,10 @@ func doWork(ctx context.Context) {
 }
 
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
-
+	ctx, cancel := context.WithCancel(context.Background()) // HL
 	go doWork(ctx)
 	time.Sleep(5 * time.Second)
-	cancel()
+	cancel() // HL
 	fmt.Println("done")
 }
 // END OMIT

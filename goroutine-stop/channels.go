@@ -3,18 +3,18 @@ package main
 import "fmt"
 
 // START OMIT
-func ping(c chan string) {
-	c <- "ping"
+func worker1(c chan string) {
+	c <- "me first!"
 }
 
-func pong(c chan string) {
-	c <- "pong"
+func worker2(c chan string) {
+	c <- "me me!"
 }
 
 func main() {
 	messages := make(chan string)
-	go ping(messages)
-	go pong(messages)
+	go worker1(messages)
+	go worker2(messages)
 
 	fmt.Println(<-messages)
 	fmt.Println(<-messages)

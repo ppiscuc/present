@@ -14,13 +14,13 @@ func doWork() {
 }
 
 func main() {
-	var wg sync.WaitGroup
-	wg.Add(1)
+	var wg sync.WaitGroup // HL
+	wg.Add(1) // HL
 		go func() {
 			doWork()
-			wg.Done()
+			wg.Done() // HL
 		}()
-	wg.Wait()
+	wg.Wait() // HL
 	fmt.Println("done")
 }
 // END OMIT

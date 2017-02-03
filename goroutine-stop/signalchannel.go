@@ -9,11 +9,11 @@ import (
 func doWork(c chan bool) {
 	for {
 		select {
-		case <- c:
-		return
+		case <- c: // HL
+		return // HL
 		default:
 			time.Sleep(time.Duration(rand.Intn(1000)) * time.Millisecond)
-			fmt.Println("work\n")
+			fmt.Println("work")
 		}
 	}
 }
