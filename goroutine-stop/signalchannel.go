@@ -1,16 +1,17 @@
 package main
 
 import (
-	"time"
 	"fmt"
 	"math/rand"
+	"time"
 )
+
 // START OMIT
-func doWork(c chan bool) {
+func doWork(c <-chan bool) {
 	for {
 		select {
-		case <- c: // HL
-		return // HL
+		case <-c: // HL
+			return // HL
 		default:
 			time.Sleep(time.Duration(rand.Intn(1000)) * time.Millisecond)
 			fmt.Println("work")
@@ -25,4 +26,5 @@ func main() {
 	close(quit) // quit <- true
 	fmt.Println("done")
 }
+
 // END OMIT

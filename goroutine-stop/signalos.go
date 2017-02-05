@@ -1,18 +1,18 @@
 package main
 
 import (
-	"time"
 	"fmt"
 	"math/rand"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 )
 
-func doWork(c chan bool) {
+func doWork(c <-chan bool) {
 	for {
 		select {
-		case <- c:
+		case <-c:
 			return
 		default:
 			time.Sleep(time.Duration(rand.Intn(1000)) * time.Millisecond)
@@ -20,6 +20,7 @@ func doWork(c chan bool) {
 		}
 	}
 }
+
 // START OMIT
 func main() {
 	quit := make(chan bool)
@@ -28,10 +29,11 @@ func main() {
 
 	go doWork(quit)
 	fmt.Println("waiting for signal")
-	s := <- c
+	s := <-c
 	quit <- true
 	fmt.Println("got signal:", s)
 	fmt.Println("done")
 
 }
+
 // END OMIT
